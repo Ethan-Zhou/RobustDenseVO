@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="DVOLib" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libDVOLib" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-march=nocona" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add directory="dvo/core" />
+					<Add directory="../../../opencv-2.4.8/include" />
+					<Add directory="../../../opencv-2.4.8/modules/flann/include" />
+					<Add directory="../../../opencv-2.4.8/modules/imgproc/include" />
+					<Add directory="../../../opencv-2.4.8/modules/photo/include" />
+					<Add directory="../../../opencv-2.4.8/modules/video/include" />
+					<Add directory="../../../opencv-2.4.8/modules/features2d/include" />
+					<Add directory="../../../opencv-2.4.8/modules/objdetect/include" />
+					<Add directory="../../../opencv-2.4.8/modules/calib3d/include" />
+					<Add directory="../../../opencv-2.4.8/modules/ml/include" />
+					<Add directory="../../../opencv-2.4.8/modules/highgui/include" />
+					<Add directory="../../../opencv-2.4.8/modules/contrib/include" />
+					<Add directory="../DVOLib" />
+					<Add directory="../../../../../usr/include/eigen3" />
+					<Add directory="../Sophus/include" />
+					<Add directory="../../../pcl-pcl-1.7.1/visualization/include" />
+					<Add directory="../../../pcl-pcl-1.7.1/common/include" />
+					<Add directory="../../../pcl-pcl-1.7.1/build/include" />
+					<Add directory="../../../../../usr/include/vtk-5.8" />
+					<Add directory="../../../pcl-pcl-1.7.1/geometry/include" />
+					<Add directory="../../../pcl-pcl-1.7.1/filters/include" />
+					<Add directory="../../../opencv-2.4.8/modules/core/include" />
+				</Compiler>
+				<Linker>
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_common.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_features.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_filters.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_io.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_io_ply.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_kdtree.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_keypoints.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_octree.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_outofcore.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_people.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_recognition.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_registration.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_sample_consensus.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_search.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_segmentation.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_surface.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_tracking.so" />
+					<Add library="../../../pcl-pcl-1.7.1/build/lib/libpcl_visualization.so" />
+					<Add directory="../../../pcl-pcl-1.7.1/build/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="libDVOLib" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="dvo/core/datatypes.h" />
+		<Unit filename="dvo/core/interpolation.cpp" />
+		<Unit filename="dvo/core/interpolation.h" />
+		<Unit filename="dvo/core/intrinsic_matrix.cpp" />
+		<Unit filename="dvo/core/intrinsic_matrix.h" />
+		<Unit filename="dvo/core/least_squares.cpp" />
+		<Unit filename="dvo/core/least_squares.h" />
+		<Unit filename="dvo/core/math_sse.cpp" />
+		<Unit filename="dvo/core/math_sse.h" />
+		<Unit filename="dvo/core/rgbd_image.cpp" />
+		<Unit filename="dvo/core/rgbd_image.h" />
+		<Unit filename="dvo/core/rgbd_image_sse.cpp" />
+		<Unit filename="dvo/core/surface_pyramid.cpp" />
+		<Unit filename="dvo/core/surface_pyramid.h" />
+		<Unit filename="dvo/core/weight_calculation.cpp" />
+		<Unit filename="dvo/core/weight_calculation.h" />
+		<Unit filename="dvo/dense_tracking.cpp" />
+		<Unit filename="dvo/dense_tracking.h" />
+		<Unit filename="dvo/dense_tracking_config.cpp" />
+		<Unit filename="dvo/util/fluent_interface.h" />
+		<Unit filename="dvo/util/histogram.cpp" />
+		<Unit filename="dvo/util/histogram.h" />
+		<Unit filename="dvo/util/id_generator.cpp" />
+		<Unit filename="dvo/util/id_generator.h" />
+		<Unit filename="dvo/util/revertable.h" />
+		<Unit filename="dvo/util/stopwatch.h" />
+		<Unit filename="dvo/visualization/async_point_cloud_builder.cpp" />
+		<Unit filename="dvo/visualization/async_point_cloud_builder.h" />
+		<Unit filename="dvo/visualization/bounded_buffer.h" />
+		<Unit filename="dvo/visualization/camera_trajectory_visualizer.cpp" />
+		<Unit filename="dvo/visualization/camera_trajectory_visualizer.h" />
+		<Unit filename="dvo/visualization/pcl_camera_trajectory_visualizer.h" />
+		<Unit filename="dvo/visualization/pcl_camera_trajetory_visualizer.cpp" />
+		<Unit filename="dvo/visualization/point_cloud_aggregator.cpp" />
+		<Unit filename="dvo/visualization/point_cloud_aggregator.h" />
+		<Unit filename="dvo/visualization/visualizer.cpp" />
+		<Unit filename="dvo/visualization/visualizer.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

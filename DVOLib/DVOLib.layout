@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="dvo/core/datatypes.h" open="0" top="0" tabpos="2">
+		<Cursor position="1494" topLine="24" />
+	</File>
+	<File name="dvo/core/interpolation.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="1057" topLine="66" />
+	</File>
+	<File name="dvo/core/interpolation.h" open="0" top="0" tabpos="2">
+		<Cursor position="924" topLine="9" />
+	</File>
+	<File name="dvo/core/intrinsic_matrix.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="1770" topLine="70" />
+	</File>
+	<File name="dvo/core/intrinsic_matrix.h" open="0" top="0" tabpos="7">
+		<Cursor position="1451" topLine="34" />
+	</File>
+	<File name="dvo/core/least_squares.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="2274" topLine="50" />
+	</File>
+	<File name="dvo/core/least_squares.h" open="0" top="0" tabpos="0">
+		<Cursor position="1415" topLine="57" />
+	</File>
+	<File name="dvo/core/math_sse.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="6702" topLine="21" />
+	</File>
+	<File name="dvo/core/rgbd_image.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="4036" topLine="17" />
+	</File>
+	<File name="dvo/core/rgbd_image.h" open="0" top="0" tabpos="4">
+		<Cursor position="2091" topLine="17" />
+	</File>
+	<File name="dvo/core/rgbd_image_sse.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="9271" topLine="215" />
+	</File>
+	<File name="dvo/core/weight_calculation.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="10603" topLine="425" />
+	</File>
+	<File name="dvo/core/weight_calculation.h" open="0" top="0" tabpos="0">
+		<Cursor position="5676" topLine="200" />
+	</File>
+	<File name="dvo/dense_tracking.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="1251" topLine="35" />
+	</File>
+	<File name="dvo/dense_tracking.h" open="0" top="0" tabpos="2">
+		<Cursor position="5404" topLine="19" />
+	</File>
+	<File name="dvo/dense_tracking_config.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="1455" topLine="6" />
+	</File>
+	<File name="dvo/util/histogram.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="1606" topLine="37" />
+	</File>
+	<File name="dvo/util/histogram.h" open="0" top="0" tabpos="0">
+		<Cursor position="947" topLine="22" />
+	</File>
+	<File name="dvo/util/id_generator.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="dvo/util/id_generator.h" open="0" top="0" tabpos="0">
+		<Cursor position="934" topLine="20" />
+	</File>
+	<File name="dvo/util/revertable.h" open="0" top="0" tabpos="0">
+		<Cursor position="1161" topLine="28" />
+	</File>
+	<File name="dvo/visualization/async_point_cloud_builder.cpp" open="0" top="0" tabpos="9">
+		<Cursor position="2377" topLine="75" />
+	</File>
+	<File name="dvo/visualization/async_point_cloud_builder.h" open="0" top="0" tabpos="8">
+		<Cursor position="1021" topLine="0" />
+	</File>
+	<File name="dvo/visualization/camera_trajectory_visualizer.cpp" open="0" top="0" tabpos="12">
+		<Cursor position="0" topLine="36" />
+	</File>
+	<File name="dvo/visualization/pcl_camera_trajectory_visualizer.h" open="0" top="0" tabpos="10">
+		<Cursor position="1027" topLine="38" />
+	</File>
+	<File name="dvo/visualization/pcl_camera_trajetory_visualizer.cpp" open="0" top="0" tabpos="11">
+		<Cursor position="1052" topLine="18" />
+	</File>
+	<File name="dvo/visualization/visualizer.cpp" open="0" top="0" tabpos="9">
+		<Cursor position="1464" topLine="18" />
+	</File>
+</CodeBlocks_layout_file>
