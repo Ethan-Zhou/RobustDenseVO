@@ -955,7 +955,7 @@ void OpticalFlow::Coarse2FineFlow(DImage &vx, DImage &vy, DImage &warpI2,const D
 	// now iterate from the top level to the bottom
 	DImage Image1,Image2,WarpImage2;
 	//GaussianMixture GMPara(Im1.nchannels()+2);
-
+    int a = Im1.nchannels();
 	// initialize noise
 	switch(noiseModel){
 	case GMixture:

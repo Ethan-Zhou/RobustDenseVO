@@ -103,20 +103,46 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 bool GetOpticalFlow(const cv::Mat& Intensity_Ref,const cv::Mat& Intensity_Cur,DImage& vx,DImage& vy,DImage& warpI2)
 {
 	// Remember to convert the mat img into the corresping type!!!
-	if(Intensity_Ref.type()!= CV_8UC1 || Intensity_Cur.type()!= CV_8UC1) // we only support three types of image information for now
-		return false;
-	DImage Im1,Im2;
+	assert(Intensity_Ref.type() == CV_8UC1 && Intensity_Cur.type() == CV_8UC1); // we only support three types of image information for now
+	assert(Intensity_Ref.size().width == vx.width() && Intensity_Ref.size().height == vx.height());
+	assert(Intensity_Cur.size().width == vy.width() && Intensity_Cur.size().height == vy.height());
+	DImage Im1(Intensity_Ref.size().width,Intensity_Ref.size().height,1);
+	DImage Im2(Intensity_Cur.size().width,Intensity_Cur.size().height,1);
 	ImageIO::loadcvMat(Intensity_Ref,Im1.pData);
 	ImageIO::loadcvMat(Intensity_Cur,Im2.pData);
-
+	//cout << Im1.pData[0] << endl;
+	//cout << Im1.pData[640*480-1] << endl;
+	/*
+	ofstream o_file1,o_file2;
+	o_file1.open("Im1_data.txt");
+	o_file2.open("Im2_data.txt");
+	int length = Im1.width()*Im1.height();
+	for(int i = 0;i<length;i++)
+	{
+	    o_file1 << Im1.pData[i];
+	    o_file2 << Im2.pData[i];
+	    if((i+1)%Im1.width()==0)
+        {
+            o_file1 << "\n";
+            o_file2 << "\n";
+        }
+        else
+        {
+            o_file1 << " ";
+            o_file2 << " ";
+        }
+	}
+	o_file1.close();
+	o_file2.close();
+	*/
     assert(Im1.matchDimension(Im2));
 	// get the parameters
-	double alpha= 1;
-	double ratio=0.5;
-	int minWidth= 40;
-	int nOuterFPIterations = 3;
+	double alpha= 0.012;
+	double ratio=0.75;
+	int minWidth= 20;
+	int nOuterFPIterations = 7;
 	int nInnerFPIterations = 1;
-	int nSORIterations= 20;
+	int nSORIterations= 30;
 
 	OpticalFlow::Coarse2FineFlow(vx,vy,warpI2,Im1,Im2,alpha,ratio,minWidth,nOuterFPIterations,nInnerFPIterations,nSORIterations);
 }
@@ -125,33 +151,65 @@ void GetWccWithOF(DImage vx, DImage vy, int t_Norm, int t_Dir, cv::Mat& Wcc,int 
 {
     int Width = vx.width();
     int Height = vx.height();
+    int length = Width*Height;
     Wcc.create(Height,Width,type);
-    DImage Norm(Width,Height);
-    DImage Dir(Width,Height);
+    float Norm[length];
+    float Dir[length];
 
     double Avg_Norm = 0;
     double Avg_Dir = 0;
-    int length = vx.width() * vx.height();
     for(int i = 0;i < length;i++)
     {
-        *(Norm.pData + i) = sqrt((*(vx.pData + i))*(*(vx.pData + i)) + (*(vy.pData + i))*(*(vy.pData + i)));
-        *(Dir.pData + i) = atan2(*(vy.pData + i),*(vx.pData + i));
-        Avg_Norm += *(Norm.pData + i);
-        Avg_Dir += *(Dir.pData + i);
+        Norm[i] = sqrt(vx.pData[i]*vx.pData[i] + vy.pData[i]*vy.pData[i]);
+        Dir[i] = atan2(vy.pData[i],vx.pData[i]);
+        Avg_Norm += Norm[i];
+        Avg_Dir += Dir[i];
     }
     Avg_Norm /= length;
     Avg_Dir /= length;
 
-    int x,y;
+
     for(int i = 0;i < length;i++)
     {
-        y = i/Width;
-        x = i%Width;
-        if (*(Norm.pData + i) > t_Norm * Avg_Norm && abs(*(Dir.pData + i) - Avg_Dir) > t_Dir)
-            *(Wcc.ptr(y,x) + i) = 0;
+        //float a = fabs(Dir.pData[i] - Avg_Dir);
+        if (Norm[i] > t_Norm * Avg_Norm && fabs(Dir[i] - Avg_Dir) > t_Dir)
+            Wcc.data[i] = 0;
         else
-            *(Wcc.ptr(y,x) + i) = 1;
+            Wcc.data[i] = 255;
     }
 }
+
+void GetWccWithOF(cv::Mat vx, cv::Mat vy, int t_Norm, int t_Dir, cv::Mat& Wcc, int type)
+{
+    int Width = vx.size().width;
+    int Height = vx.size().height;
+    int length = Width * Height;
+    Wcc.create(Height,Width,type);
+    float Norm[length];
+    float Dir[length];
+
+    float Avg_Norm = 0;
+    float Avg_Dir = 0;
+
+    for(int i = 0;i < length;i++)
+    {
+        Norm[i] = sqrt(vx.data[i]*vx.data[i] + vy.data[i]*vy.data[i]);
+        Dir[i] = atan2(vy.data[i],vx.data[i]);
+        Avg_Norm += Norm[i];
+        Avg_Dir += Dir[i];
+    }
+    Avg_Norm /= length;
+    Avg_Dir /= length;
+
+    for(int i = 0;i < length;i++)
+    {
+        //float a = fabs(Dir.pData[i] - Avg_Dir);
+        if (Norm[i] < t_Norm * Avg_Norm && fabs(Dir[i] - Avg_Dir) > t_Dir)
+            Wcc.data[i] = 0;
+        else
+            Wcc.data[i] = 255;
+    }
+}
+
 }
 

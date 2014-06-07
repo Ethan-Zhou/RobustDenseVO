@@ -6,7 +6,9 @@
 #include "highgui.h"
 #include "ImageIO.h"
 #include <math.h>
-using namespace OpticalFlowAnalysis;
+namespace OpticalFlowAnalysis
+{
 bool GetOpticalFlow(const cv::Mat& Intensity_Ref,const cv::Mat& Intensity_Cur,DImage& vx,DImage& vy,DImage& warpI2);
 void GetWccWithOF(DImage vx, DImage vy, int t_Norm, int t_Dir, cv::Mat& Wcc,int type);
-
+void GetWccWithOF(cv::Mat vx, cv::Mat vy, int t_Norm, int t_Dir, cv::Mat& Wcc, int type);
+}

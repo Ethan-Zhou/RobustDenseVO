@@ -48,7 +48,11 @@ void GaussianPyramid::ConstructPyramid(const DImage &image, double ratio, int mi
 	if(ratio>0.98 || ratio<0.4)
 		ratio=0.75;
 	// first decide how many levels
-	nLevels=log((double)minWidth/image.width())/log(ratio);
+	/***********************************/
+	/* For speed, here nLevels = 1*/
+	/***********************************/
+	//nLevels=log((double)minWidth/image.width())/log(ratio);
+	nLevels = 1;
 	if(ImPyramid!=NULL)
 		delete []ImPyramid;
 	ImPyramid=new DImage[nLevels];

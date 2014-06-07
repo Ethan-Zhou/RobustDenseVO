@@ -18,7 +18,8 @@ public:
 	static bool loadcvMat(const cv::Mat& im, T*& pImagePlane);
 	template <class T>
 	static bool saveImage(const char* filename,const T* pImagePlane,int width,int height, int nchannels,ImageType imtype = standard);
-
+    template <class T>
+    static bool Image2cvMat(const T* pImagePlane, cv::Mat& im, int width, int height, int nchannels, ImageType imtype = derivative);
 };
 
 template <class T>
@@ -66,24 +67,12 @@ bool ImageIO::loadcvMat(const cv::Mat& im, T*& pImagePlane)
 {
 	if(im.data == NULL) // if allocation fails
 		return false;
-	if(im.type()!= CV_8UC1) // we only support three types of image information for now
+	if(im.type()!= CV_8UC1)
 		return false;
 	int width = im.size().width;
 	int height = im.size().height;
 	int nchannels = im.channels();
 	pImagePlane = new T[width*height*nchannels];
-
-	if(typeid(T) == typeid(unsigned char))
-	{
-		for(int i = 0;i<height;i++)
-			memcpy(pImagePlane+i*im.step,im.data+i*im.step,width*nchannels);
-		return true;
-	}
-
-	// check whether the type is float point
-	bool IsFloat=false;
-	if(typeid(T)==typeid(double) || typeid(T)==typeid(float) || typeid(T)==typeid(long double))
-		IsFloat=true;
 
 	for(int i =0;i<height;i++)
 	{
@@ -91,16 +80,91 @@ bool ImageIO::loadcvMat(const cv::Mat& im, T*& pImagePlane)
 		int offset2 = i*im.step;
 		for(int j=0;j<im.step;j++)
 		{
-			if(IsFloat)
-				pImagePlane[offset1+j] = (T)im.data[offset2+j]/255;
-			else
-				pImagePlane[offset1+j] = im.data[offset2+j];
+            pImagePlane[offset1+j] = (T)im.data[offset2+j]/255;
 		}
 	}
 	return true;
 }
 
+template <class T>
+bool ImageIO::Image2cvMat(const T* pImagePlane, cv::Mat& im, int width, int height, int nchannels, ImageType imtype)
+{
+    switch(nchannels){
+		case 1:
+			im.create(height,width,CV_8UC1);
+			break;
+		case 3:
+			im.create(height,width,CV_8UC3);
+			break;
+		default:
+			return -1;
+	}
+	// check whether the type is float point
+	bool IsFloat=false;
+	if(typeid(T)==typeid(double) || typeid(T)==typeid(float) || typeid(T)==typeid(long double))
+		IsFloat=true;
 
+	T Max,Min;
+	int nElements = width*height*nchannels;
+	switch(imtype){
+		case standard:
+			break;
+		case derivative:
+			// find the max of the absolute value
+			Max = pImagePlane[0];
+			if(!IsFloat)
+				for(int i = 0;i<nElements;i++)
+					Max = __max(Max,abs(pImagePlane[i]));
+			else
+				for(int i=0;i<nElements;i++)
+					Max = __max(Max,fabs((double)pImagePlane[i]));
+			Max*=2;
+			break;
+		case normalized:
+			Max = Min = pImagePlane[0];
+			for(int i = 0;i<nElements;i++)
+			{
+				Max = __max(Max,pImagePlane[i]);
+				Min = __min(Min,pImagePlane[i]);
+			}
+			break;
+	}
+	if(typeid(T) == typeid(unsigned char) && imtype == standard)
+	{
+		for(int i = 0;i<height;i++)
+			memcpy(im.data+i*im.step,pImagePlane+i*im.step,width*nchannels);
+	}
+	else
+	{
+		for(int i =0;i<height;i++)
+		{
+			int offset1 = i*width*nchannels;
+			int offset2 = i*im.step;
+			for(int j=0;j<im.step;j++)
+			{
+				switch(imtype){
+					case standard:
+						if(IsFloat)
+							im.data[offset2+j] = pImagePlane[offset1+j]*255;
+						else
+							im.data[offset2+j] = __max(__min(pImagePlane[offset1+j],255),0);
+						break;
+					case derivative:
+
+						if(IsFloat)
+							im.data[offset2+j] = (double)(pImagePlane[offset1+j]/Max+0.5)*255;
+						else
+							im.data[offset2+j] = ((double)pImagePlane[offset1+j]/Max+0.5)*255;
+						break;
+					case normalized:
+						im.data[offset2+j] = (double)(pImagePlane[offset1+j]-Min)/(Max-Min)*255;
+						break;
+				}
+			}
+		}
+	}
+	return true;
+}
 template <class T>
 bool ImageIO::saveImage(const char* filename,const T* pImagePlane,int width,int height, int nchannels,ImageType imtype)
 {
