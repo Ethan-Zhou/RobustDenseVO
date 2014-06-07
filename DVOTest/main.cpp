@@ -8,10 +8,10 @@
 #include <dvo/util/revertable.h>
 #include "TestFuncs.h"
 #include "Image.h"
-//#include "Coarse2FineTwoFrames.h"
+#include "Coarse2FineTwoFrames.h"
 
 #include "project.h"
-//#include "OpticalFlow.h"
+#include "OpticalFlow.h"
 #include "ImageIO.h"
 #include <math.h>
 
@@ -67,7 +67,7 @@ int main()
     cv::Mat ImgTemp;
     o_file.open(OutputFilename);
 
-    for(int i = 1;i <= 2500;i++)
+    for(int i = 1;i <= 1232;i++)
     {
         rgb_txt.getline(buf,23);
         depth_txt.getline(buf,23);
@@ -124,32 +124,69 @@ int main()
             depth_cur.convertTo(depth_cur,CV_32FC1);
             depth_ref /= 5000.0f;
             depth_cur /= 5000.0f;
-            cout << depth_ref.row(200) << endl;
+            //cout << intensity_ref.ptr[0] << endl;
+            //cout << depth_ref.at<float>(200,200) << endl;
+            //cout << depth_ref.data[200*depth_ref.size().width] << endl;
 
             //  Camera Motion Estimation
             RgbdImagePyramid RefPyd(intensity_ref,depth_ref);
             RgbdImagePyramid CurPyd(intensity_cur,depth_cur);
-            //cout << intensity_ref.type() << endl;
 
             Tran.setIdentity();
             /*********************************************************/
             /*Optical Flow Test*/
             /*********************************************************/
-            //DImage vx(intensity_ref.size().width,intensity_ref.size().height);
-            //DImage vx(2,2,1);
-
-            //DImage vy(intensity_ref.size().width,intensity_ref.size().height,1);
-            //DImage warp2(intensity_ref.size().width,intensity_ref.size().height,1);
-            //GetOpticalFlow(intensity_ref,intensity_cur,vx,vy,warp2);
             //cout << intensity_ref.size().width << endl;
+            DImage vx(intensity_ref.size().width,intensity_ref.size().height,1);
+            DImage vy(intensity_ref.size().width,intensity_ref.size().height,1);
+            DImage warp2(intensity_ref.size().width,intensity_ref.size().height,1);
+            cv::Mat Wcc;
+            //ShowImage(intensity_ref,intensity_ref.type(),"intensity_ref");
+
+            intensity_ref.convertTo(intensity_ref,CV_8UC1);
+            intensity_cur.convertTo(intensity_cur,CV_8UC1);
+            //cout << (int)intensity_ref.at<unsigned char>(100,100) << endl;
+
+            GetOpticalFlow(intensity_ref,intensity_cur,vx,vy,warp2);
+            /*ofstream of1,of2;
+            of1.open("vx_data.txt");
+            of2.open("vy_data.txt");
+            for(int i = 0;i<vx.width()*vx.height();i++)
+            {
+                of1 << vx.pData[i];
+                of2 << vy.pData[i];
+                if((i+1)%vx.width()==0)
+                {
+                    of1 << "\n";
+                    of2 << "\n";
+                }
+                else
+                {
+                    of1 << " ";
+                    of2 << " ";
+                }
+            }
+            of1.close();
+            of2.close();*/
+            // Look at the result of the vx vy
+            //cv::Mat Vx;
+            //cv::Mat Vy;
+            //ImageIO::Image2cvMat(vx.pData,Vx,vx.width(),vx.height(),1);
+            //ImageIO::Image2cvMat(vy.pData,Vy,vy.width(),vy.height(),1);
+            //ShowImage(Vx,0,"vx");
+            //ShowImage(Vy,0,"vy");
+            //cout << (int)(Vx.data[2000]) << endl;
+            cout << vx.pData[0] << " "<< vx.pData[99] <<" "<< vy.pData[0] <<" "<< vy.pData[99] << endl;
+            GetWccWithOF(vx,vy,2.5,1.5,Wcc,CV_8UC1);
+            ShowImage(Wcc,0,"Wcc_OF");
 
             //Ref is 1st frame, Cur is 2nd frame;
             //we want: 1->2
-            DTObj.match(RefPyd,CurPyd,Tran);
+            /**********************************/
+            //DTObj.match(RefPyd,CurPyd,Tran);
             cout << i - 1 << endl;
             cout << Tran.matrix() << endl;
             //cout << Tran.translation() << endl;
-            //cout << IM.scale() << endl;
 
             // Copy Cur to Ref
             rgb_ref = imread(aaa,CV_LOAD_IMAGE_UNCHANGED);
@@ -159,7 +196,7 @@ int main()
             /**************************************************************************/
             /**Used for test the correctness of the motion estimatio*/
             /**********************************************************/
-
+            /*
             RgbdImage Ref = RefPyd.level(0);
             RgbdImage Cur = CurPyd.level(0);
 
@@ -167,7 +204,6 @@ int main()
             Mat Residual1;
             Mat Residual2;
 
-            //Tran.setIdentity();
             AffineTransform transformation = Tran.cast<NumType>();
             //cout << *(transformation.data() + 3) << endl;
             //cout << (transformation.rotation() * transformation.rotation().transpose()).matrix() << endl;
@@ -184,12 +220,14 @@ int main()
             Residual1 = Ref.intensity - Cur.intensity;
             Residual2 = result.intensity - Cur.intensity;
 
-            ShowImage(Residual1,0,"I1-I2");
-            ShowImage(Residual2,0,"I11-I2");
+            //ShowImage(Residual1,0,"I1-I2");
+            //ShowImage(Residual2,0,"I11-I2");
+            */
 
             /****************************************************************************/
             // Write the motion matrix to output file
-            o_file << Tran.matrix() << endl;
+            /******************************************************************************/
+            //o_file << Tran.matrix() << endl;
         }
         o_file.close();
         rgb_txt.close();

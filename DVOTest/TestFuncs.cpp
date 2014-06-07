@@ -19,4 +19,7 @@ void ShowImage(Mat image,int type,string WindowName)
     imshow( WindowName, image);
 }
 
-//void GetResidual(Mat image1,Mat image2)
+void Test()
+{
+
+}
